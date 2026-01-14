@@ -1,11 +1,24 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Roboto_Mono } from "next/font/google";
+import { Nothing_You_Could_Do } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
+
+const RobotoMono = Roboto_Mono({
+  subsets:["latin"],
+  variable:"--font-Roboto_Mono"
+})
+
+const NothingYouCouldDo = Nothing_You_Could_Do({
+  subsets:["latin"],
+  weight:"400",
+  variable:"--font-Nothing_You_Could_Do"
+})
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -25,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${RobotoMono.variable} ${NothingYouCouldDo.variable} antialiased`}
       >
         {children}
       </body>
