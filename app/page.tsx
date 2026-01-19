@@ -13,7 +13,7 @@ export default function Home() {
         </nav>
         <div className="flex justify-center items-center md:h-screen px-4 h-96">
           <h1 className=" text-4xl  md:text-7xl text-white font-Nothing_You_Could_Do">
-            From one <span className="bg-[#AA3BFF] px-7 rounded-r-4xl rounded-l-4xl">prompt</span> to a <br/><span className="font-Roboto_Mono">Perfect</span> Email
+            From one <span className="bg-[#AA3BFF] px-4 ">prompt</span> to a <br/><span className="font-Roboto_Mono">Perfect</span> Email
           </h1>
         </div>
       </div>

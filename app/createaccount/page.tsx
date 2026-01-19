@@ -1,7 +1,54 @@
-import React from 'react'
+"use client"
+import React, { useState } from 'react'
 import Link from 'next/link'
+import { signIn } from 'next-auth/react'
 
 function CreateAccount() {
+
+
+  const handleGoogleAuth = ()=>{
+        signIn("google", {callbackUrl:"/dashboard"})
+        
+      }
+
+
+  const [userDetails , setUserdetails] = useState({
+  name:"",
+  email:"",
+  phone:"",
+  password:"",
+  confirmPassword:""
+  })
+
+  const handelSubmit =async (e:React.FormEvent<HTMLFormElement>)=>{
+    e.preventDefault()
+    if(userDetails.password != userDetails.confirmPassword){
+      alert("password didnt match")
+    }else{
+      const res = await fetch("/api/register" , {
+       method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userDetails),
+    })
+    
+
+    if (!res.ok) {
+      const text = await res.text()
+      console.error("Register failed:", text)
+      return
+    }
+    const data = await res.json()
+    setUserdetails({
+      name:"",
+      email:"",
+      phone:"",
+      password:"",
+      confirmPassword:""
+    })
+
+    }
+    
+  }
   return (
     <div className='min-h-screen w-full bg-black'> 
         
@@ -10,12 +57,12 @@ function CreateAccount() {
       </div>
 
       <div className='flex justify-center items-center px-3  font-Roboto_Mono py-11'>
-        <div className='md:h-162 h-164 md:w-1/3 w-[80%] sm:w-[60%] bg-[#AA3BFF] rounded-3xl '>
+        <div className='md:h-162 h-164 md:w-125 w-[80%] sm:w-96 bg-[#AA3BFF] rounded-3xl '>
           <h1 className='font-Roboto_Mono text-black text-center pt-6 font-bold md:text-2xl'>
             Create Account
           </h1>
 
-          <form action="">
+          <form onSubmit={handelSubmit}>
 
 
 
@@ -25,13 +72,15 @@ function CreateAccount() {
             </label>
 
             <div className="relative w-[80%] mx-auto">
-             <svg xmlns="http://www.w3.org/2000/svg "   className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none" width="48" height="48" viewBox="0 0 48 48"><g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"><circle cx="24" cy="11" r="7" fill="#000"/><path d="M4 41c0-8.837 8.059-16 18-16"/><path fill="#000" d="m31 42l10-10l-4-4l-10 10v4z"/></g></svg>
+             <svg xmlns="http://www.w3.org/2000/svg "   className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none" width="48" height="48" viewBox="0 0 48 48"><g fill="none" stroke="#000" strokeLinecap="round" strokeLinejoin="round" strokeWidth="4"><circle cx="24" cy="11" r="7" fill="#000"/><path d="M4 41c0-8.837 8.059-16 18-16"/><path fill="#000" d="m31 42l10-10l-4-4l-10 10v4z"/></g></svg>
               <input
                 type="text"
                 name="name"
                 id="name"
                 placeholder="Enter your name"
                 className="bg-white py-2 pl-10 pr-2 rounded-xl w-full"
+                 value={userDetails.name}
+                  onChange={(e)=>{setUserdetails({...userDetails,name:e.target.value})}}
               />
             </div>
 
@@ -54,6 +103,8 @@ function CreateAccount() {
                 id="email"
                 placeholder="Enter your Email"
                 className="bg-white py-2 pl-10 pr-2 rounded-xl w-full"
+                value={userDetails.email}
+                onChange={(e)=>{setUserdetails({...userDetails,email:e.target.value})}}
               />
             </div>
 
@@ -75,6 +126,8 @@ function CreateAccount() {
                 id="password"
                 placeholder="Enter your Password"
                 className="bg-white py-2 pl-10 pr-2 rounded-xl w-full"
+                value={userDetails.password}
+                onChange={(e)=>{setUserdetails({...userDetails,password:e.target.value})}}
               />
             </div>
             
@@ -94,6 +147,8 @@ function CreateAccount() {
                 id="confirmpassword"
                 placeholder="Enter your confirm password"
                 className="bg-white py-2 pl-10 pr-2 rounded-xl w-full"
+                 value={userDetails.confirmPassword}
+                 onChange={(e)=>{setUserdetails({...userDetails,confirmPassword:e.target.value})}}
               />
             </div>
             
@@ -105,10 +160,10 @@ function CreateAccount() {
           </div>
 
           
-            <div className='pt-6'>
-                <div className='bg-black w-[50%] mx-auto py-2 rounded-4xl text-white text-center '>
+            <div className='pt-6 flex'>
+                <button type='submit' className='bg-black w-[50%] mx-auto py-2 rounded-4xl text-white text-center '>
                 Create Account
-                </div>
+                </button>
             </div>
 
             <div className='flex justify-center items-center py-4'>
@@ -118,16 +173,13 @@ function CreateAccount() {
           </div>
 
           <div>
-            <div className='flex justify-center items-center gap-2 bg-black text-white py-2  w-[60%] mx-auto rounded-2xl'>
+            <div onClick={handleGoogleAuth} className='flex justify-center items-center gap-2 bg-black text-white py-2  w-[60%] mx-auto rounded-2xl'>
               <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 16 16"><g fill="none" fillRule="evenodd" clipRule="evenodd"><path fill="#f44336" d="M7.209 1.061c.725-.081 1.154-.081 1.933 0a6.57 6.57 0 0 1 3.65 1.82a100 100 0 0 0-1.986 1.93q-1.876-1.59-4.188-.734q-1.696.78-2.362 2.528a78 78 0 0 1-2.148-1.658a.26.26 0 0 0-.16-.027q1.683-3.245 5.26-3.86" opacity="0.987"/><path fill="#ffc107" d="M1.946 4.92q.085-.013.161.027a78 78 0 0 0 2.148 1.658A7.6 7.6 0 0 0 4.04 7.99q.037.678.215 1.331L2 11.116Q.527 8.038 1.946 4.92" opacity="0.997"/><path fill="#448aff" d="M12.685 13.29a26 26 0 0 0-2.202-1.74q1.15-.812 1.396-2.228H8.122V6.713q3.25-.027 6.497.055q.616 3.345-1.423 6.032a7 7 0 0 1-.51.49" opacity="0.999"/><path fill="#43a047" d="M4.255 9.322q1.23 3.057 4.51 2.854a3.94 3.94 0 0 0 1.718-.626q1.148.812 2.202 1.74a6.62 6.62 0 0 1-4.027 1.684a6.4 6.4 0 0 1-1.02 0Q3.82 14.524 2 11.116z" opacity="0.993"/></g></svg> <h1>Continue with google</h1>
             </div>
           </div>
            
 
           </form>
-
-          
-         
 
          
         </div>

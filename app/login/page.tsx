@@ -1,7 +1,38 @@
-import React from 'react'
+"use client"
+import React, { useState } from 'react'
+import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 
 function Login() {
+
+   const [error, setError] = useState("")
+  const [user,setuser] = useState({
+      email:"",
+      password:""
+    })
+
+
+    const handleGoogleAuth = ()=>{
+      signIn("google", {callbackUrl:"/dashboard"})
+      
+    }
+  
+    const handleSubmit = async (e:React.FormEvent<HTMLFormElement>)=>{
+        e.preventDefault()
+        setError("")
+        
+          await signIn("credentials", {
+            email:user.email,
+            password:user.password,
+            callbackUrl: "/dashboard",
+          })
+          
+        // if (result?.error) {
+        //   setError(result.error)
+        // } else if (result?.ok) {
+        //   window.location.href = "/dashboard"
+        // }
+      }
   return (
     <div className='min-h-screen w-full bg-black'> 
         
@@ -15,7 +46,7 @@ function Login() {
             Sign In
           </h1>
 
-          <form action="">
+          <form onSubmit={handleSubmit}>
 
             
             <div className="flex flex-col  gap-1 pt-3">
@@ -29,6 +60,8 @@ function Login() {
                 type="email"
                 name="email"
                 id="email"
+                value={user.email}
+                onChange={(e)=>{setuser({...user,email:e.target.value})}}
                 placeholder="Enter your Email"
                 className="bg-white py-2 pl-10 pr-2 rounded-xl w-full"
               />
@@ -48,7 +81,9 @@ function Login() {
                 name="password"
                 id="password"
                 placeholder="Enter your Password"
+                value={user.password}
                 className="bg-white py-2 pl-10 pr-2 rounded-xl w-full"
+                onChange={(e)=>{setuser({...user,password:e.target.value})}}
               />
             </div>
             
@@ -56,9 +91,12 @@ function Login() {
 
           <h1 className='text-end  w-[80%] mx-auto text-sm pt-2 font-bold pb-4 hover:text-white cursor-pointer'>Forgor password ?</h1>
           
+          <div className='flex'>
 
-           <div className='bg-black w-[50%] mx-auto py-2 rounded-4xl text-white text-center '>
+          
+           <button  type='submit' className='bg-black w-[50%] mx-auto py-2 rounded-4xl text-white text-center '>
             Signin
+          </button>
           </div>
 
           </form>
@@ -74,7 +112,7 @@ function Login() {
           </div>
 
           <div>
-            <div className='flex justify-center items-center gap-2 bg-black text-white py-2  w-[60%] mx-auto rounded-2xl'>
+            <div onClick={handleGoogleAuth} className='flex justify-center items-center gap-2 bg-black text-white py-2  w-[60%] mx-auto rounded-2xl'>
               <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 16 16"><g fill="none" fillRule="evenodd" clipRule="evenodd"><path fill="#f44336" d="M7.209 1.061c.725-.081 1.154-.081 1.933 0a6.57 6.57 0 0 1 3.65 1.82a100 100 0 0 0-1.986 1.93q-1.876-1.59-4.188-.734q-1.696.78-2.362 2.528a78 78 0 0 1-2.148-1.658a.26.26 0 0 0-.16-.027q1.683-3.245 5.26-3.86" opacity="0.987"/><path fill="#ffc107" d="M1.946 4.92q.085-.013.161.027a78 78 0 0 0 2.148 1.658A7.6 7.6 0 0 0 4.04 7.99q.037.678.215 1.331L2 11.116Q.527 8.038 1.946 4.92" opacity="0.997"/><path fill="#448aff" d="M12.685 13.29a26 26 0 0 0-2.202-1.74q1.15-.812 1.396-2.228H8.122V6.713q3.25-.027 6.497.055q.616 3.345-1.423 6.032a7 7 0 0 1-.51.49" opacity="0.999"/><path fill="#43a047" d="M4.255 9.322q1.23 3.057 4.51 2.854a3.94 3.94 0 0 0 1.718-.626q1.148.812 2.202 1.74a6.62 6.62 0 0 1-4.027 1.684a6.4 6.4 0 0 1-1.02 0Q3.82 14.524 2 11.116z" opacity="0.993"/></g></svg> <h1>Continue with google</h1>
             </div>
           </div>
