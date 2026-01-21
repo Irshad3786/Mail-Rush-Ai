@@ -36,6 +36,10 @@ export const authOptions:AuthOptions = {
           throw new Error("User not found");
         }
 
+        if (user.provider === "google") {
+          throw new Error("This account was created using Google. Please continue with Google.");
+        }
+
         const isPasswordCorrect = await bcrypt.compare(
           credentials.password,
           user.password
@@ -63,6 +67,20 @@ export const authOptions:AuthOptions = {
    callbacks: {
     async signIn({ user, account, profile }) {
       if (account?.provider === "google") {
+
+        await connectDB();
+
+        const existingUser = await User.findOne({email:user.email})
+
+        if(!existingUser){
+          await User.create({
+            name: user.name,
+            email: user.email,
+            provider: "google",
+            googleId: account.providerAccountId,
+            password: null,
+          })
+        }
         console.log("✅ GOOGLE USER DATA");
 
         console.log("📧 Email:", profile?.email);

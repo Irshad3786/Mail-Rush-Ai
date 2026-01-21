@@ -6,6 +6,7 @@ import { User } from "@/models/user";
 
 export async function POST ( req: NextRequest ){
     try {
+        
         const { name, email, password } = await req.json()
 
         if(!name || !email || !password){
@@ -27,7 +28,8 @@ export async function POST ( req: NextRequest ){
         await User.create({
             name,
             email,
-            password:hashPassword
+            password:hashPassword,
+            provider: "credentials",
         })
 
         console.log("User registered:", { name, email })

@@ -2,14 +2,17 @@
 import React, { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 function Login() {
+  const router = useRouter()
 
-   const [error, setError] = useState("")
   const [user,setuser] = useState({
       email:"",
       password:""
     })
+
+  const [formError, setFormError] = useState<string | null>(null)
 
 
     const handleGoogleAuth = ()=>{
@@ -19,14 +22,30 @@ function Login() {
   
     const handleSubmit = async (e:React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
-        setError("")
+
+        if(!user.email || !user.password){
+          setFormError("Enter email and password")
+          return
+        }
+
+        setFormError(null)
+
+        const result = await signIn("credentials", {
+          email:user.email,
+          password:user.password,
+          redirect:false
+        })
+
+        if(result?.error){
+          setFormError(result.error)
+          return
+        }
+
+        if(result?.ok){
+          router.push("/dashboard")
+        }
         
-          await signIn("credentials", {
-            email:user.email,
-            password:user.password,
-            callbackUrl: "/dashboard",
-          })
-          
+         
         // if (result?.error) {
         //   setError(result.error)
         // } else if (result?.ok) {
@@ -90,6 +109,10 @@ function Login() {
             </div>
 
           <h1 className='text-end  w-[80%] mx-auto text-sm pt-2 font-bold pb-4 hover:text-white cursor-pointer'>Forgor password ?</h1>
+
+          {formError && (
+            <p className='text-red-700 text-center text-sm pb-2'>{formError}</p>
+          )}
           
           <div className='flex'>
 
@@ -112,7 +135,7 @@ function Login() {
           </div>
 
           <div>
-            <div onClick={handleGoogleAuth} className='flex justify-center items-center gap-2 bg-black text-white py-2  w-[60%] mx-auto rounded-2xl'>
+            <div onClick={handleGoogleAuth} className='flex justify-center cursor-pointer items-center gap-2 bg-black text-white py-2  w-[60%] mx-auto rounded-2xl'>
               <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 16 16"><g fill="none" fillRule="evenodd" clipRule="evenodd"><path fill="#f44336" d="M7.209 1.061c.725-.081 1.154-.081 1.933 0a6.57 6.57 0 0 1 3.65 1.82a100 100 0 0 0-1.986 1.93q-1.876-1.59-4.188-.734q-1.696.78-2.362 2.528a78 78 0 0 1-2.148-1.658a.26.26 0 0 0-.16-.027q1.683-3.245 5.26-3.86" opacity="0.987"/><path fill="#ffc107" d="M1.946 4.92q.085-.013.161.027a78 78 0 0 0 2.148 1.658A7.6 7.6 0 0 0 4.04 7.99q.037.678.215 1.331L2 11.116Q.527 8.038 1.946 4.92" opacity="0.997"/><path fill="#448aff" d="M12.685 13.29a26 26 0 0 0-2.202-1.74q1.15-.812 1.396-2.228H8.122V6.713q3.25-.027 6.497.055q.616 3.345-1.423 6.032a7 7 0 0 1-.51.49" opacity="0.999"/><path fill="#43a047" d="M4.255 9.322q1.23 3.057 4.51 2.854a3.94 3.94 0 0 0 1.718-.626q1.148.812 2.202 1.74a6.62 6.62 0 0 1-4.027 1.684a6.4 6.4 0 0 1-1.02 0Q3.82 14.524 2 11.116z" opacity="0.993"/></g></svg> <h1>Continue with google</h1>
             </div>
           </div>
