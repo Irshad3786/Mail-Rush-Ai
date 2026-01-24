@@ -5,6 +5,7 @@ function Dashboard() {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+  const [input,setinput] = useState("")
 
   const handleInput = () => {
     if (textareaRef.current) {
@@ -21,6 +22,8 @@ function Dashboard() {
     }
   }
 
+
+  
   const handleFileClick = () => {
     fileInputRef.current?.click()
   }
@@ -35,6 +38,26 @@ function Dashboard() {
   const removeFile = (index: number) => {
     setSelectedFiles(prev => prev.filter((_, i) => i !== index))
   }
+
+
+
+  const generateEmail = async () => {
+    const res = await fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ input }),
+    });
+
+    const data = await res.json();
+
+    console.log(data);
+    setinput("")
+    
+  };
+
+
+  
+
 
   return (
     <div className='w-full min-h-screen bg-black'>
@@ -57,11 +80,13 @@ function Dashboard() {
                 ref={textareaRef}
                 placeholder='Generate Emails with MailRush Ai' 
                 onInput={handleInput}
+                value={input}
                 className='bg-white px-3 w-full py-2 rounded-2xl focus:outline-none focus:ring-2 pl-12 pr-12 resize-none overflow-hidden  scrollbar-hide' 
                 style={{
                   scrollbarWidth: 'none',
                   msOverflowStyle: 'none',
                 }}
+                onChange={(e)=>{setinput(e.target.value)}}
               />
               <svg xmlns="http://www.w3.org/2000/svg" width="24" className='absolute left-3 top-3' height="24" viewBox="0 0 24 24"><path fill="#939393" d="m9.96 9.137l.886-3.099c.332-1.16 1.976-1.16 2.308 0l.885 3.099a1.2 1.2 0 0 0 .824.824l3.099.885c1.16.332 1.16 1.976 0 2.308l-3.099.885a1.2 1.2 0 0 0-.824.824l-.885 3.099c-.332 1.16-1.976 1.16-2.308 0l-.885-3.099a1.2 1.2 0 0 0-.824-.824l-3.099-.885c-1.16-.332-1.16-1.976 0-2.308l3.099-.885a1.2 1.2 0 0 0 .824-.824m8.143 7.37c.289-.843 1.504-.844 1.792 0l.026.087l.296 1.188l1.188.297c.96.24.96 1.602 0 1.842l-1.188.297l-.296 1.188c-.24.959-1.603.959-1.843 0l-.297-1.188l-1.188-.297c-.96-.24-.96-1.603 0-1.842l1.188-.297l.297-1.188zm.896 2.29a1 1 0 0 1-.203.203a1 1 0 0 1 .203.203a1 1 0 0 1 .203-.203a1 1 0 0 1-.203-.204M4.104 2.506c.298-.871 1.585-.842 1.818.087l.296 1.188l1.188.297c.96.24.96 1.602 0 1.842l-1.188.297l-.296 1.188c-.24.959-1.603.959-1.843 0l-.297-1.188l-1.188-.297c-.96-.24-.96-1.603 0-1.842l1.188-.297l.297-1.188zM5 4.797a1 1 0 0 1-.203.202A1 1 0 0 1 5 5.203a1 1 0 0 1 .203-.204A1 1 0 0 1 5 4.796"/></svg>
               
@@ -105,7 +130,7 @@ function Dashboard() {
             )}
 
             <div className='flex justify-center items-center pt-2 '>
-              <button className='bg-[#AA3BFF] flex justify-center items-center gap-2 px-10 py-2 rounded-2xl cursor-pointer font-Roboto_Mono font-bold'>Generate <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#000" d="M18 3a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zM6 5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm5.412 2.4a.632.632 0 0 1 1.176 0l.316.763a5.46 5.46 0 0 0 2.815 2.908l.896.399c.513.228.514.975 0 1.204l-.95.422a5.45 5.45 0 0 0-2.773 2.813l-.308.707a.633.633 0 0 1-1.168 0l-.308-.707a5.45 5.45 0 0 0-2.773-2.813l-.95-.422c-.513-.229-.513-.976 0-1.204l.896-.399a5.46 5.46 0 0 0 2.814-2.908z"/></svg></button>
+              <button onClick={generateEmail} className='bg-[#AA3BFF] flex justify-center items-center gap-2 px-10 py-2 rounded-2xl cursor-pointer font-Roboto_Mono font-bold'>Generate <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#000" d="M18 3a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zM6 5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm5.412 2.4a.632.632 0 0 1 1.176 0l.316.763a5.46 5.46 0 0 0 2.815 2.908l.896.399c.513.228.514.975 0 1.204l-.95.422a5.45 5.45 0 0 0-2.773 2.813l-.308.707a.633.633 0 0 1-1.168 0l-.308-.707a5.45 5.45 0 0 0-2.773-2.813l-.95-.422c-.513-.229-.513-.976 0-1.204l.896-.399a5.46 5.46 0 0 0 2.814-2.908z"/></svg></button>
             
             </div>
           </div>

@@ -17,7 +17,23 @@ function Result() {
 
         </nav>
 
-        <div className='flex justify-center items-center pt-14 font-Roboto_Mono'>
+
+        <div className='flex items-center gap-4 pt-5 flex-wrap justify-end pr-14'>
+                <label className='flex items-center gap-3 cursor-pointer'>
+                  <span className='text-white font-bold'>Design Template</span>
+                  <div 
+                    onClick={() => setIsToggled(!isToggled)}
+                    className={`relative w-14 h-7 rounded-full transition-colors ${isToggled ? 'bg-white' : 'bg-gray-400'}`}
+                  >
+                    <div 
+                      className={`absolute top-1 left-1 w-5 h-5 bg-black rounded-full transition-transform ${isToggled ? 'translate-x-7' : 'translate-x-0'}`}
+                    />
+                  </div>
+                </label>
+              </div>
+
+
+        <div className='flex justify-center items-center pt-14 font-Roboto_Mono py-11'>
           <div className='h-fit py-5 w-[80%]  bg-[#AA3BFF] rounded-3xl' >
             <div className='pl-4 pr-4 md:pl-14 pt-8'>
               <div className='flex  items-center flex-wrap gap-2'>
@@ -42,20 +58,7 @@ function Result() {
               </div>
 
 
-              <div className='flex items-center gap-4 pt-5 flex-wrap'>
-                <label className='flex items-center gap-3 cursor-pointer'>
-                  <span className='text-white font-bold'>Design Template</span>
-                  <div 
-                    onClick={() => setIsToggled(!isToggled)}
-                    className={`relative w-14 h-7 rounded-full transition-colors ${isToggled ? 'bg-white' : 'bg-gray-400'}`}
-                  >
-                    <div 
-                      className={`absolute top-1 left-1 w-5 h-5 bg-black rounded-full transition-transform ${isToggled ? 'translate-x-7' : 'translate-x-0'}`}
-                    />
-                  </div>
-                </label>
-              </div>
-
+              
 
             </div> 
 
@@ -64,7 +67,7 @@ function Result() {
 
             <div className='flex justify-end pr-11 pt-6'>
               <button title='submit' className='bg-black text-white px-6 py-2 rounded-3xl flex justify-center items-center gap-2'>
-                Send <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#f0f0f0" fill-rule="evenodd" d="M3.402 6.673c-.26-2.334 2.143-4.048 4.266-3.042l11.944 5.658c2.288 1.083 2.288 4.339 0 5.422L7.668 20.37c-2.123 1.006-4.525-.708-4.266-3.042L3.882 13H12a1 1 0 1 0 0-2H3.883z" clip-rule="evenodd"/></svg>
+                Send <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#f0f0f0" fillRule="evenodd" d="M3.402 6.673c-.26-2.334 2.143-4.048 4.266-3.042l11.944 5.658c2.288 1.083 2.288 4.339 0 5.422L7.668 20.37c-2.123 1.006-4.525-.708-4.266-3.042L3.882 13H12a1 1 0 1 0 0-2H3.883z" clip-rule="evenodd"/></svg>
             </button>
 
             </div>
