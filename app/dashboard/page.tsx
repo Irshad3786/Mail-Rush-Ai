@@ -5,7 +5,9 @@ function Dashboard() {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+  const [isToggled, setIsToggled] = useState(false)
   const [input,setinput] = useState("")
+  const [finData , setfinData] = useState<{body: string,email:string,subject:string} | null>(null)
 
   const handleInput = () => {
     if (textareaRef.current) {
@@ -51,7 +53,7 @@ function Dashboard() {
     const data = await res.json();
 
     console.log(data);
-    setinput("")
+    setfinData(data)
     
   };
 
@@ -72,6 +74,20 @@ function Dashboard() {
           </div>
 
         </nav>
+
+        <div className='flex items-center gap-4 pt-5 flex-wrap justify-end pr-14'>
+                <label className='flex items-center gap-3 cursor-pointer'>
+                  <span className='text-white font-bold'>Design Template</span>
+                  <div 
+                    onClick={() => setIsToggled(!isToggled)}
+                    className={`relative w-14 h-7 rounded-full transition-colors ${isToggled ? 'bg-white' : 'bg-gray-400'}`}
+                  >
+                    <div 
+                      className={`absolute top-1 left-1 w-5 h-5 bg-black rounded-full transition-transform ${isToggled ? 'translate-x-7' : 'translate-x-0'}`}
+                    />
+                  </div>
+                </label>
+              </div>
 
         <div className='flex justify-center items-center px-5 h-96'>
           <div className='w-full max-w-xl'>
@@ -137,14 +153,65 @@ function Dashboard() {
         </div>
 
 
-        <div>
-          <h1 className='text-center text-white font-Roboto_Mono text-2xl '>Top Templates</h1>
+            
 
-          <div className='flex justify-center items-center gap-8 w-full py-8 flex-wrap'>
-            <div className='w-72 h-56 bg-white rounded-3xl'></div>
-            <div className='w-72 h-56 bg-white rounded-3xl'></div>
-            <div className='w-72 h-56 bg-white rounded-3xl'></div>
-            <div className='w-72 h-56 bg-white rounded-3xl'></div>
+
+        <div className='flex justify-center items-center pt-3 font-Roboto_Mono py-11'>
+          <div className='h-fit py-5 w-[80%]  bg-[#AA3BFF] rounded-3xl' >
+            <div className='pl-4 pr-4 md:pl-14 pt-8'>
+              <div className='flex  items-center flex-wrap gap-2'>
+              <h1 className='font-bold'>Recipients</h1>
+              <input 
+                type="text"
+                title='one'
+                value={finData?.email || ""}
+                onChange={(e)=> {setfinData({subject: finData?.subject  || "" , email: e.target.value, body: finData?.body  || ""})}}
+                className='bg-white py-3 px-2 rounded-4xl text-sm md:text-md w-full max-w-5xl focus:outline-none focus:ring-2 focus:ring-purple-500'
+              />
+              </div> 
+              <div className='flex items-center gap-2 md:gap-9 pt-5 flex-wrap'>
+              <h1 className='font-bold'>Subject</h1>
+              <input 
+                type="text"
+                title='two'
+                value={finData?.subject || ""}
+                onChange={(e)=> {setfinData({subject: e.target.value , email: finData?.email  || "", body: finData?.body  || ""})}}
+                className='bg-white py-3 px-2 rounded-4xl w-full max-w-5xl focus:outline-none focus:ring-2 focus:ring-purple-500'
+              />
+              </div>
+
+              
+
+              <div className='flex items-center gap-2 md:gap-16 pt-5 flex-wrap w-full '>
+              <h1 className='font-bold'>Text</h1>
+              <textarea 
+                name="text" 
+                id="emailText"
+                value={finData?.body || ""}
+                onChange={(e)=> {setfinData({subject: finData?.subject  || "" , email: finData?.email  || "", body: e.target.value })}}
+                placeholder="Enter your message here..."
+                className='bg-white border rounded-4xl  border-gray-300  p-4 h-72 w-full md:w-full max-w-5xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 overflow-y-auto scrollbar-hide'
+              />
+              </div>
+
+
+              
+
+            </div> 
+
+            
+
+
+            <div className='flex justify-end pr-11 pt-6'>
+              <button title='submit' className='bg-black text-white px-6 py-2 rounded-3xl flex justify-center items-center gap-2'>
+                Send <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#f0f0f0" fillRule="evenodd" d="M3.402 6.673c-.26-2.334 2.143-4.048 4.266-3.042l11.944 5.658c2.288 1.083 2.288 4.339 0 5.422L7.668 20.37c-2.123 1.006-4.525-.708-4.266-3.042L3.882 13H12a1 1 0 1 0 0-2H3.883z" clip-rule="evenodd"/></svg>
+            </button>
+
+            </div>
+            
+
+            
+            
           </div>
         </div>
 
