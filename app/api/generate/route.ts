@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import Groq from "groq-sdk";
+import { PDFParse } from "pdf-parse";
 
 
 
@@ -35,22 +36,50 @@ export async function POST(req: Request) {
       );
     }
 
-    const prompt = `
-        User input:
-        "${input}"
+   const prompt = `
+User input:
+"${input}"
 
-        TASK:
-        1. Extract the email address
-        2. Understand the job role
-        3. Generate a professional job application email
+TASK:
+1. Extract the recipient email address (if present)
+2. Understand the intent and purpose of the email from the user input
+3. Generate a clear, professional email subject
+4. Write a well-structured plain text email body based on the intent
+5. Design a modern, clean EMAIL using ONLY HTML with INLINE CSS
+6. The EMAIL DESIGN must visually match the written body content
+7. The SAME HTML must be usable:
+   - for website preview
+   - for sending the actual email
 
-        Return ONLY valid JSON in this format:
-        {
-        "email": "",
-        "subject": "",
-        "body": ""
-        }
-        `;
+DESIGN RULES:
+- Use ONLY plain HTML with INLINE CSS
+- NO Tailwind CSS
+- NO <style> tags
+- Use table-based layout (email-client safe)
+- No JavaScript
+- No external fonts, images, or assets
+- Professional and minimal UI
+- Use sections like header, content block, divider, footer
+- Optional visual elements: dividers or simple progress/skill bars using divs
+
+CONTENT RULES:
+- Subject must match the email intent
+- Body must be human, natural, and professional
+- Do NOT hardcode job-related content unless required by the input
+
+OUTPUT RULES:
+- Return ONLY valid JSON
+- No explanations
+- No markdown
+
+Return JSON in EXACTLY this format:
+{
+  "email": "",
+  "subject": "",
+  "body": "",
+  "email_html": ""
+}
+`;
 
     const completion = await groq.chat.completions.create({
       model: "llama-3.1-8b-instant",
